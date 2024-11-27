@@ -1,0 +1,16 @@
+<h1>Seller Dashboard</h1>
+{% if user.is_authenticated %}
+    <a href="{% url 'logout' %}">Logout</a>
+{% endif %}
+
+<a href="{% url 'add_product' %}">Add a New Product</a>
+<ul>
+    {% for product in products %}
+    <li>
+        {{ product.name }} - {{ product.price }}
+        <a href="{% url 'edit_product' product.id %}">Edit</a>
+        <a href="{% url 'delete_product' product.id %}">Delete</a>
+
+    </li>
+    {% endfor %}
+</ul>

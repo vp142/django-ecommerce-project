@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f4f4f9;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input, select, button {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #ffffff;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .actions a {
+            margin-left: 10px;
+            text-decoration: none;
+            color: #007BFF;
+        }
+        .actions a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Seller Dashboard</h1>
+
+    {% if user.is_authenticated %}
+        <p>Welcome, {{ user.first_name }}!</p>
+        <a href="{% url 'users:logout' %}">Logout</a>
+    {% endif %}
+    <a href="{% url 'products:add_product' %}" style="margin-top: 20px; display: inline-block;">Add New Product</a>
+
+    <form method="get" class="filters">
+        <input type="text" name="search" placeholder="Search products..." value="{{ search_query }}">
+        <input type="number" name="min_price" placeholder="Min price" value="{{ min_price }}">
+        <input type="number" name="max_price" placeholder="Max price" value="{{ max_price }}">
+        <select name="sort">
+            <option value="" {% if sort_by == '' %}selected{% endif %}>Sort by</option>
+            <option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+            <option value="price_desc" {% if sort_by == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+            <option value="name_asc" {% if sort_by == 'name_asc' %}selected{% endif %}>Name: A to Z</option>
+            <option value="name_desc" {% if sort_by == 'name_desc' %}selected{% endif %}>Name: Z to A</option>
+        </select>
+        <button type="submit">Apply</button>
+    </form>
+
+    <ul>
+        {% for product in products %}
+        <li>
+            <span>
+                <strong>{{ product.name }}</strong> - ${{ product.price }} <br>
+                <small>Quantity: {{ product.quantity }}</small>
+            </span>
+            <div class="actions">
+                <a href="{% url 'products:edit_product' product.id %}">Edit</a>
+                <a href="{% url 'products:delete_product' product.id %}">Delete</a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

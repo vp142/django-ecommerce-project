@@ -1,0 +1,34 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+
+# Django stuff:
+*.pot
+*.pyc
+*.pyc.*
+*.py,cover
+*.migrations/
+
+# Ignore local settings and environment variables
+.env
+
+# IDEs and editors
+*.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Log files
+*.log
+
+# Media uploads
+media/
+
+# Node.js files (if using frontend build tools)
+node_modules/
