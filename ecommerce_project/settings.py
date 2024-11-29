@@ -11,9 +11,15 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
+import os
+
+SENDGRID_API_KEY = config('SENDGRID_API_KEY')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Quick-start development settings - unsuitable for production
@@ -134,3 +140,7 @@ AUTHENTICATION_BACKENDS = [
     'users.backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',  # Keep this for admin and other default auth features
 ]
+
+STRIPE_PUBLIC_KEY = "pk_test_51QHYTrCrNtbl0isEDwaVGCiVoGLiExIIJP46YGtHEE1Yj9daG0Gei2l39tdhKGQIxlu6A8CdMfplwdC3V8SSqwjP00nBhIzEHd"
+STRIPE_SECRET_KEY = "sk_test_51QHYTrCrNtbl0isEImhRDJesyg129kT7nAnVe5oS9g5q54YVlPbsHyreHuGHWpX78L4M1PXYEjW5chjQ1fQBAbA900mXe4mdZB"
+

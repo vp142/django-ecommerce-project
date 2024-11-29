@@ -5,41 +5,135 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Product</title>
     <style>
+        /* General Styles */
         body {
             font-family: Arial, sans-serif;
-            padding: 20px;
-            background: #f4f4f9;
+            background: linear-gradient(to bottom, #007bff, #5cb85c);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        form {
-            max-width: 500px;
-            margin: auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        button {
-            display: block;
+
+        /* Form Container */
+        .form-container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
             width: 100%;
-            background: #007BFF;
-            color: #fff;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            max-width: 500px;
         }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input[type="text"], input[type="number"], textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: none;
+            height: 100px;
+        }
+
+        button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
         button:hover {
             background: #0056b3;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #007bff;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            color: #0056b3;
+        }
+
+        .messages {
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #dc3545;
+            text-align: left;
+        }
+
+        .messages ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .form-container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Add a New Product</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save Product</button>
-    </form>
-    <a href="{% url 'products:seller_dashboard' %}">Back to Dashboard</a>
+    <div class="form-container">
+        <h1>Add a New Product</h1>
+        
+        <!-- Display messages, if any -->
+        {% if messages %}
+        <div class="messages">
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        
+        <!-- Form Section -->
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save Product</button>
+        </form>
+        
+        <!-- Back to Dashboard Link -->
+        <a href="{% url 'products:seller_dashboard' %}" class="back-link">Back to Dashboard</a>
+    </div>
 </body>
 </html>

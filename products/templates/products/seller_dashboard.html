@@ -5,94 +5,251 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seller Dashboard</title>
     <style>
+        /* General Styles */
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #f4f4f9, #dce0e3);
+        }
+
+        /* Header Section */
+        .header {
+            background: #007bff;
+            color: white;
             padding: 20px;
-            background: #f4f4f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
         }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+            background: #dc3545;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .header a:hover {
+            background: #c82333;
+        }
+
+        /* Container Section */
+        .container {
+            padding: 20px;
+        }
+
+        /* Filters Section */
         .filters {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
             margin-bottom: 20px;
         }
+
         input, select, button {
             padding: 10px;
             font-size: 14px;
             border: 1px solid #ddd;
             border-radius: 4px;
+            width: 200px;
         }
+
         button {
             background: #007BFF;
             color: white;
             cursor: pointer;
         }
+
         button:hover {
             background: #0056b3;
         }
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        li {
-            background: #ffffff;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .actions a {
-            margin-left: 10px;
+
+        .add-product-btn {
+            display: inline-block;
+            margin: 20px auto;
             text-decoration: none;
-            color: #007BFF;
+            color: white;
+            background: #28a745;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
         }
-        .actions a:hover {
-            text-decoration: underline;
+
+        .add-product-btn:hover {
+            background: #218838;
+        }
+
+        /* Product Grid Section */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+            padding: 10px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-card h3 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .product-card p {
+            font-size: 14px;
+            color: #777;
+        }
+
+        .stock-status {
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 5px;
+            padding: 8px 12px;
+            margin: 10px 0;
+            display: inline-block;
+        }
+
+        .stock-out {
+            background: #dc3545;
+            color: white;
+        }
+
+        .stock-low {
+            background: #ffc107;
+            color: black;
+        }
+
+        .stock-ok {
+            background: #28a745;
+            color: white;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .actions a {
+            text-decoration: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .actions a.edit {
+            background: #007bff;
+        }
+
+        .actions a.edit:hover {
+            background: #0056b3;
+        }
+
+        .actions a.delete {
+            background: #dc3545;
+        }
+
+        .actions a.delete:hover {
+            background: #c82333;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            font-size: 18px;
+            color: #777;
+            margin-top: 50px;
         }
     </style>
 </head>
 <body>
-    <h1>Seller Dashboard</h1>
+    <!-- Header Section -->
+    <div class="header">
+        <h1>Seller Dashboard</h1>
+        {% if user.is_authenticated %}
+            <a href="{% url 'users:logout' %}">Logout</a>
+        {% endif %}
+    </div>
+    <div style="margin: 20px 0; text-align: right;">
+        <a href="{% url 'products:seller_orders' %}" 
+           style="padding: 10px 20px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 4px;">
+            View My Orders
+        </a>
+    </div>
+    <!-- Filters Section -->
+    <div class="container">
+        <form method="get" class="filters">
+            <input type="text" name="search" placeholder="Search products..." value="{{ search_query }}">
+            <input type="number" name="min_price" placeholder="Min price" value="{{ min_price }}">
+            <input type="number" name="max_price" placeholder="Max price" value="{{ max_price }}">
+            <select name="sort">
+                <option value="" {% if sort_by == '' %}selected{% endif %}>Sort by</option>
+                <option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                <option value="price_desc" {% if sort_by == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                <option value="name_asc" {% if sort_by == 'name_asc' %}selected{% endif %}>Name: A to Z</option>
+                <option value="name_desc" {% if sort_by == 'name_desc' %}selected{% endif %}>Name: Z to A</option>
+            </select>
+            <button type="submit">Apply</button>
+        </form>
 
-    {% if user.is_authenticated %}
-        <p>Welcome, {{ user.first_name }}!</p>
-        <a href="{% url 'users:logout' %}">Logout</a>
-    {% endif %}
-    <a href="{% url 'products:add_product' %}" style="margin-top: 20px; display: inline-block;">Add New Product</a>
+        <!-- Add Product Button -->
+        <a href="{% url 'products:add_product' %}" class="add-product-btn">Add New Product</a>
 
-    <form method="get" class="filters">
-        <input type="text" name="search" placeholder="Search products..." value="{{ search_query }}">
-        <input type="number" name="min_price" placeholder="Min price" value="{{ min_price }}">
-        <input type="number" name="max_price" placeholder="Max price" value="{{ max_price }}">
-        <select name="sort">
-            <option value="" {% if sort_by == '' %}selected{% endif %}>Sort by</option>
-            <option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
-            <option value="price_desc" {% if sort_by == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
-            <option value="name_asc" {% if sort_by == 'name_asc' %}selected{% endif %}>Name: A to Z</option>
-            <option value="name_desc" {% if sort_by == 'name_desc' %}selected{% endif %}>Name: Z to A</option>
-        </select>
-        <button type="submit">Apply</button>
-    </form>
+        <!-- Products Section -->
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="product-card">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px;">
 
-    <ul>
-        {% for product in products %}
-        <li>
-            <span>
-                <strong>{{ product.name }}</strong> - ${{ product.price }} <br>
-                <small>Quantity: {{ product.quantity }}</small>
-            </span>
-            <div class="actions">
-                <a href="{% url 'products:edit_product' product.id %}">Edit</a>
-                <a href="{% url 'products:delete_product' product.id %}">Delete</a>
+                <h3>{{ product.name }}</h3>
+                <p>Price: ${{ product.price }}</p>
+                <p>
+                    {% if product.quantity == 0 %}
+                        <span class="stock-status stock-out">Out of Stock</span>
+                    {% elif product.quantity < 5 %}
+                        <span class="stock-status stock-low">Low Stock ({{ product.quantity }})</span>
+                    {% else %}
+                        <span class="stock-status stock-ok">In Stock ({{ product.quantity }})</span>
+                    {% endif %}
+                </p>
+                <div class="actions">
+                    <a href="{% url 'products:edit_product' product.id %}" class="edit">Edit</a>
+                    <a href="{% url 'products:delete_product' product.id %}" class="delete">Delete</a>
+                </div>
             </div>
-        </li>
-        {% endfor %}
-    </ul>
+            {% empty %}
+            <p class="empty-state">No products found. Try adjusting your filters.</p>
+            {% endfor %}
+        </div>
+    </div>
 </body>
 </html>

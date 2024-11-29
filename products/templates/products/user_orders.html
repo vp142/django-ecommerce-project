@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #007BFF, #4CAF50);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #007BFF;
+            margin-bottom: 20px;
+        }
+
+        .order-container {
+            margin: 0 auto;
+        }
+
+        .order-item {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .order-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .order-info {
+            flex: 1;
+        }
+
+        .order-info h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .order-info p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .product-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        .order-details {
+            display: flex;
+            align-items: center;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            background: #007BFF;
+            padding: 10px 20px;
+            border-radius: 6px;
+            width: 150px;
+            margin: 20px auto 0;
+        }
+
+        .back-link:hover {
+            background: #0056b3;
+        }
+
+        .empty-state {
+            text-align: center;
+            font-size: 16px;
+            color: #777;
+        }
+
+        .empty-state a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        .empty-state a:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>My Orders</h1>
+        <div class="order-container">
+            {% if orders %}
+                {% for order in orders %}
+                <div class="order-item">
+                    <div class="order-details">
+                        <img src="{{ order.product.image.url }}" alt="{{ order.product.name }}" class="product-image">
+                        <div class="order-info">
+                            <h3>{{ order.product.name }}</h3>
+                            <p>Price: ${{ order.product.price }}</p>
+                            <p>Quantity: {{ order.quantity }}</p>
+                            <p>Ordered on: {{ order.created_at|date:"F j, Y, g:i a" }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="empty-state">No orders found. <a href="{% url 'products:all_products' %}">Shop Now</a></p>
+            {% endif %}
+        </div>
+        <a href="{% url 'products:all_products' %}" class="back-link">Back to Products</a>
+    </div>
+</body>
+</html>
