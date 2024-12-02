@@ -12,6 +12,9 @@ from django.http import JsonResponse
 from django.contrib import messages
 from products.utils import send_email  # Import your send_email function
 from django.db.models import Sum
+from users.models import CustomUser  # Replace with your user model
+from .decorators import admin_required
+
 # from rest_framework.decorators import api_view
 # from rest_framework.response import Response
 # from .models import Product
@@ -363,3 +366,35 @@ def seller_orders(request):
     return render(request, 'products/seller_orders.html', {
         'orders': orders,
     })
+
+@admin_required
+def admin_dashboard(request):
+    if not request.user.is_admin:
+        return redirect('home')  # Redirect non-admin users to the home page
+
+    # Aggregate data for the admin dashboard
+    total_users = CustomUser.objects.filter(is_admin=False).count()
+    total_sellers = CustomUser.objects.filter(is_seller=True).count()
+    total_products = Product.objects.count()
+    total_orders = Order.objects.count()
+    total_sales = sum(order.total_price for order in Order.objects.all())
+
+    # Fetch detailed data
+    users = CustomUser.objects.filter(is_admin=False)  # Non-admin users
+    sellers = CustomUser.objects.filter(is_seller=True)  # Sellers
+    products = Product.objects.all()
+    orders = Order.objects.select_related('user', 'product')
+
+    context = {
+        'total_users': total_users,
+        'total_sellers': total_sellers,
+        'total_products': total_products,
+        'total_orders': total_orders,
+        'total_sales': total_sales,
+        'users': users,
+        'sellers': sellers,
+        'products': products,
+        'orders': orders,
+    }
+    return render(request, 'products/admin_dashboard.html', context)
+

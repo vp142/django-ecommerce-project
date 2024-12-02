@@ -26,7 +26,7 @@ def user_login(request):
                 login(request, user)
                 # Redirect based on role
                 if user.is_admin:
-                    return redirect('/admin/')  # Redirect admins to the admin panel
+                    return redirect('products:admin_dashboard')  # Redirect admins to the admin panel
                 elif user.is_seller:
                     return redirect('products:seller_dashboard')  # Redirect sellers to their dashboard
                 else:

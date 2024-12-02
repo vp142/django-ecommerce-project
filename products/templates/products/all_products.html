@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Products</title>
     <style>
+        /* General Styles */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -12,6 +13,11 @@
             background: #f4f4f9;
         }
 
+        h1, h2, h3 {
+            margin: 0;
+        }
+
+        /* Header */
         .header {
             background-color: #007bff;
             color: white;
@@ -22,118 +28,123 @@
         }
 
         .header h1 {
-            margin: 0;
             font-size: 24px;
         }
 
-        .header .auth-links a {
-            color: white;
-            text-decoration: none;
-            margin-left: 10px;
-            font-weight: bold;
-            background-color: #0056b3;
-            padding: 8px 15px;
-            border-radius: 4px;
+        .auth-links {
+            display: flex;
+            align-items: center;
         }
 
-        .header .auth-links a:hover {
+        .auth-links p {
+            margin: 0 10px 0 0;
+        }
+
+        .auth-links a {
+            text-decoration: none;
+            color: white;
+            padding: 8px 15px;
+            background-color: #0056b3;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .auth-links a:hover {
             background-color: #003d82;
         }
 
-        .view-cart {
-            text-align: center;
-            margin: 20px 0;
-        }
-
         .view-cart a {
+            display: inline-block;
+            margin: 20px auto;
             padding: 10px 20px;
             background-color: #007bff;
             color: white;
             text-decoration: none;
+            border-radius: 5px;
             font-size: 16px;
-            border-radius: 4px;
         }
 
         .view-cart a:hover {
             background-color: #0056b3;
         }
 
+        /* Filters */
         .filters {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
             justify-content: center;
-            margin: 20px;
+            margin: 20px 0;
         }
 
-        input, select, button {
+        .filters input, .filters select, .filters button {
             padding: 10px;
             font-size: 14px;
             border: 1px solid #ddd;
-            border-radius: 4px;
-            width: 200px;
+            border-radius: 5px;
+            min-width: 200px;
         }
 
-        button {
-            background: #007BFF;
+        .filters button {
+            background: #007bff;
             color: white;
             cursor: pointer;
-            width: auto;
         }
 
-        button:hover {
+        .filters button:hover {
             background: #0056b3;
         }
 
+        /* Products Section */
         .product-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
             padding: 20px;
-            margin: 0;
         }
 
         .product-card {
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .product-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+            transform: scale(1.03);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
         .product-card img {
             width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            height: 200px;
+            object-fit: cover;
         }
 
         .product-card h3 {
-            font-size: 20px;
-            margin: 10px 0;
+            margin: 10px;
+            font-size: 18px;
             color: #333;
         }
 
         .product-card p {
+            margin: 10px;
             font-size: 14px;
-            color: #555;
-            margin: 10px 0;
+            color: #777;
         }
 
         .product-card span {
-            font-size: 18px;
+            margin: 10px;
+            font-size: 16px;
             font-weight: bold;
-            color: #007BFF;
-            margin-bottom: 10px;
+            color: #007bff;
+            display: block;
+        }
+
+        .product-card form {
+            margin: 10px;
         }
 
         .product-card button {
@@ -141,22 +152,60 @@
             color: white;
             border: none;
             padding: 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
+            border-radius: 5px;
             font-size: 14px;
-            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
         }
 
         .product-card button:hover {
             background: #0056b3;
         }
 
+        /* Notifications */
+        .notification {
+            text-align: center;
+            padding: 10px;
+            margin: 20px;
+            background-color: #ffcccb;
+            color: #a94442;
+            border-radius: 5px;
+        }
+
+        /* Empty State */
         .empty-state {
             text-align: center;
             font-size: 18px;
             color: #777;
-            margin-top: 50px;
+            margin: 50px 0;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .pagination a {
+            text-decoration: none;
+            color: #007bff;
+            padding: 8px 15px;
+            margin: 0 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .pagination a:hover {
+            background: #007bff;
+            color: white;
+        }
+
+        .pagination .active {
+            background: #007bff;
+            color: white;
+            border: none;
         }
     </style>
 </head>
@@ -164,24 +213,17 @@
     <!-- Header -->
     <div class="header">
         <h1>All Products</h1>
-        <div style="text-align: right; margin-bottom: 20px;">
-            <a href="{% url 'products:user_orders' %}" 
-               style="padding: 10px 20px; background-color: #28a745; color: white; text-decoration: none; border-radius: 4px;">
-                My Orders
-            </a>
-        </div>
         <div class="auth-links">
             {% if user.is_authenticated %}
-                <p style="display: inline; margin-right: 10px;">Welcome, {{ user.first_name }}!</p>
+                <p>Welcome, {{ user.first_name }}!</p>
                 <a href="{% url 'users:logout' %}">Logout</a>
             {% else %}
                 <a href="{% url 'users:login' %}">Login</a>
                 <a href="{% url 'users:register' %}">Register</a>
             {% endif %}
         </div>
-        
     </div>
-    
+
     <!-- View Cart -->
     <div class="view-cart">
         <a href="{% url 'products:view_cart' %}">View Cart</a>
@@ -193,25 +235,23 @@
         <input type="number" name="min_price" placeholder="Min price" value="{{ min_price }}">
         <input type="number" name="max_price" placeholder="Max price" value="{{ max_price }}">
         <select name="sort">
-            <option value="" {% if sort_by == '' %}selected{% endif %}>Sort by</option>
-            <option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
-            <option value="price_desc" {% if sort_by == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
-            <option value="name_asc" {% if sort_by == 'name_asc' %}selected{% endif %}>Name: A to Z</option>
-            <option value="name_desc" {% if sort_by == 'name_desc' %}selected{% endif %}>Name: Z to A</option>
+            <option value="">Sort by</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
         </select>
         <button type="submit">Apply</button>
     </form>
+
+    <!-- Notifications -->
     {% if not products.exists %}
-    <div class="notification" style="text-align: center; padding: 10px; background-color: #ffcccb; border-radius: 4px; margin-bottom: 20px;">
-        Note: Out-of-stock products are not shown.
-    </div>
+    <div class="notification">Note: Out-of-stock products are not shown.</div>
     {% endif %}
-    
+
     <!-- Products Section -->
     <div class="product-container">
         {% for product in products %}
         <div class="product-card">
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px;">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
             <h3>{{ product.name }}</h3>
             <span>${{ product.price }}</span>
             <p>{{ product.description }}</p>
@@ -223,6 +263,17 @@
         {% empty %}
         <p class="empty-state">No products available at the moment.</p>
         {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        {% if products.has_previous %}
+        <a href="?page={{ products.previous_page_number }}">Previous</a>
+        {% endif %}
+        <span class="active">{{ products.number }}</span>
+        {% if products.has_next %}
+        <a href="?page={{ products.next_page_number }}">Next</a>
+        {% endif %}
     </div>
 </body>
 </html>

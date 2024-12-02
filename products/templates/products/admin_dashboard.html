@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f9;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 200px;
+        }
+
+        .table-container {
+            margin: 20px 0;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        .logout-btn {
+            display: block;
+            margin: 20px auto;
+            background: #dc3545;
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            width: 150px;
+        }
+
+        .logout-btn:hover {
+            background: #b02a37;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    <a href="{% url 'users:logout' %}" class="logout-btn">Logout</a>
+
+    <!-- Overview Section -->
+    <div class="stats-container">
+        <div class="stat">
+            <h2>{{ total_users }}</h2>
+            <p>Total Users</p>
+        </div>
+        <div class="stat">
+            <h2>{{ total_sellers }}</h2>
+            <p>Total Sellers</p>
+        </div>
+        <div class="stat">
+            <h2>{{ total_products }}</h2>
+            <p>Total Products</p>
+        </div>
+        <div class="stat">
+            <h2>{{ total_orders }}</h2>
+            <p>Total Orders</p>
+        </div>
+        <div class="stat">
+            <h2>${{ total_sales }}</h2>
+            <p>Total Sales</p>
+        </div>
+    </div>
+
+    <!-- Users Section -->
+    <div class="table-container">
+        <h2>All Users</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    {% comment %} <th>Username</th> {% endcomment %}
+                    <th>Email</th>
+                    <th>Date Joined</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    {% comment %} <td>{{ user.username }}</td> {% endcomment %}
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.date_joined|date:"Y-m-d H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Sellers Section -->
+    <div class="table-container">
+        <h2>All Sellers</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    {% comment %} <th>Username</th> {% endcomment %}
+                    <th>Email</th>
+                    <th>Date Joined</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for seller in sellers %}
+                <tr>
+                    <td>{{ seller.id }}</td>
+                    {% comment %} <td>{{ seller.username }}</td> {% endcomment %}
+                    <td>{{ seller.email }}</td>
+                    <td>{{ seller.date_joined|date:"Y-m-d H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Products Section -->
+    <div class="table-container">
+        <h2>All Products</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Seller</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>{{ product.id }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>${{ product.price }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ product.seller }}</td> 
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Orders Section -->
+    <div class="table-container">
+        <h2>All Orders</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Product</th>
+                    {% comment %} <th>Buyer</th> {% endcomment %}
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                    <th>Ordered On</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.product.name }}</td>
+                    {% comment %} <td>{{ order.user.username }}</td> {% endcomment %}
+                    <td>{{ order.quantity }}</td>
+                    <td>${{ order.total_price }}</td>
+                    <td>{{ order.created_at|date:"Y-m-d H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Logout Button -->
+</body>
+</html>

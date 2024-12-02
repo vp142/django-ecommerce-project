@@ -9,83 +9,86 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #007BFF, #4CAF50);
-            color: #fff;
+            background: linear-gradient(to bottom right, #007BFF, #00C853);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            color: #fff;
         }
 
         .container {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
+            background: #f9f9f9;
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            width: 90%;
-            max-width: 500px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         h1 {
-            margin-bottom: 20px;
             color: #007BFF;
         }
 
-        .welcome-message {
+        p {
             font-size: 18px;
-            margin-bottom: 15px;
+            margin: 10px 0;
+            color: #333;
         }
 
-        .buttons a {
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background-color: #007BFF;
+            color: white;
             text-decoration: none;
-            color: #fff;
-            background: #007BFF;
-            padding: 10px 20px;
-            border-radius: 6px;
-            margin: 10px;
+            padding: 10px 15px;
+            border-radius: 5px;
             font-size: 16px;
-            display: inline-block;
+            transition: background-color 0.3s;
         }
 
-        .buttons a:hover {
-            background: #0056b3;
+        .btn:hover {
+            background-color: #0056b3;
         }
 
-        .buttons a.register {
-            background: #28A745;
-        }
-
-        .buttons a.register:hover {
-            background: #218838;
-        }
-
-        .footer {
+        footer {
             margin-top: 20px;
             font-size: 14px;
-            color: #666;
+            color: #777;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to Our Platform</h1>
+        <h1>Welcome to Our E-commerce Platform</h1>
+        {% if user.is_authenticated and user.is_admin %}
+    <a href="{% url 'admin_dashboard' %}">Admin Dashboard</a>
+{% endif %}
+
         {% if user.is_authenticated %}
-            <p class="welcome-message">Hello, <strong>{{ user.first_name }}</strong>! We're glad to see you again.</p>
-            <div class="buttons">
-                <a href="{% url 'users:logout' %}">Logout</a>
+            <p>Hello, <strong>{{ user.first_name }}</strong>! We're glad to see you again.</p>
+            <div class="btn-group">
+                <a href="{% url 'products:all_products' %}" class="btn">View Products</a>
+                <a href="{% url 'products:view_cart' %}" class="btn">My Cart</a>
+                <a href="{% url 'products:user_orders' %}" class="btn">My Orders</a>
+                {% if user.is_seller %}
+                    <a href="{% url 'products:seller_dashboard' %}" class="btn">Seller Dashboard</a>
+                {% endif %}
             </div>
+            <a href="{% url 'users:logout' %}" class="btn" style="background-color: #DC3545;">Logout</a>
         {% else %}
-            <p class="welcome-message">Welcome! Please log in or register to explore our features.</p>
-            <div class="buttons">
-                <a href="{% url 'users:login' %}">Login</a>
-                <a href="{% url 'users:register' %}" class="register">Register</a>
+            <div class="btn-group">
+                <a href="{% url 'users:login' %}" class="btn">Login</a>
+                <a href="{% url 'users:register' %}" class="btn">Register</a>
             </div>
         {% endif %}
-        <div class="footer">
-            <p>&copy; {{ now|date:"Y" }} Your Company Name. All rights reserved.</p>
-        </div>
     </div>
+    <footer>&copy; E-commerce Company Pvt Ltd. All rights reserved.</footer>
 </body>
 </html>

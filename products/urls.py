@@ -20,5 +20,7 @@ urlpatterns = [
     path('orders/', views.user_orders, name='user_orders'),  # For users
     path('seller/orders/', views.seller_orders, name='seller_orders'),
     # path('api/products/', get_products, name='get_products'),
+    path('admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),
+
 
 ]
